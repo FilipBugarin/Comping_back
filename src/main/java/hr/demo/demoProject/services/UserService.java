@@ -30,10 +30,10 @@ public class UserService extends AbstractService {
 
     @Transactional
     public ProjectAuthUser loginPlainUser(String username) {
-        return getDemoProjectUser(username, true, false, null);
+        return getDemoProjectUser(username, true);
     }
 
-    public ProjectAuthUser getDemoProjectUser(String username, boolean persistLogin, boolean isNiasLogin, UserSession userSession) {
+    public ProjectAuthUser getDemoProjectUser(String username, boolean persistLogin) {
         User user = userRepository.findActiveUserByUsername(username, ProjectConstants.STATUS_ACTIVE).orElseThrow(()->new DemoProjectNotFoundException(ProjectErrorMessagesConstants.FIND_USER_ERROR));
 
         List<GrantedAuthority> authorities = new ArrayList<>();

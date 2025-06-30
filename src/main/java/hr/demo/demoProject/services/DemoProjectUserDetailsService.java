@@ -16,7 +16,7 @@ public class DemoProjectUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userService.getDemoProjectUser(username, false, false, null);
+        return userService.getDemoProjectUser(username, false);
     }
 
 }

@@ -7,8 +7,6 @@ import hr.demo.demoProject.domain.core.Movie;
 import hr.demo.demoProject.domain.core.MovieActor;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 public class CoreMapper {
 

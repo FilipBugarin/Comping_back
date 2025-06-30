@@ -25,7 +25,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-  private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
+  private static final String SECRET_KEY = "7A317D2130416A2B5638796F324D3D7146364B3468514E646D6F444E5A72367731";
   private static final Long REFRESH_TOKEN_VALID_TIME = 1000L * 60 * 60 * 24 * 2; // 2 days
 
   public static final Integer REFRESH_TOKEN_VALID_TIME_SECONDS = 300;
