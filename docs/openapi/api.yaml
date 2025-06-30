@@ -1,0 +1,42 @@
+openapi: 3.0.3
+info:
+  title: DemoProject API Documentation
+  version: 1.0.0
+paths:
+  #################
+  # Auth
+  #################
+
+  /auth/authenticate:
+    $ref: './auth.yaml#/paths/authenticate'
+  /auth/refresh:
+    $ref: './auth.yaml#/paths/refresh'
+
+  #################
+  # Core
+  #################
+  /movies:
+    $ref: './core.yaml#/paths/movies'
+  /movies/{id}:
+    $ref: './core.yaml#/paths/movie_id'
+  /actors:
+    $ref: './core.yaml#/paths/actors'
+  /actors/{id}:
+    $ref: './core.yaml#/paths/actor_id'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        type:
+          type: string
+        title:
+          type: string
+        status:
+          type: integer
+          format: int32
+        detail:
+          type: string
+        instance:
+          type: string

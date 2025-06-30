@@ -1,0 +1,129 @@
+plugins {
+	id 'java'
+	id 'java-library'
+	id 'org.springframework.boot' version '3.2.1'
+	id 'io.spring.dependency-management' version '1.1.4'
+	id("org.hibernate.orm") version "6.4.1.Final"
+	// id 'org.graalvm.buildtools.native' version '0.9.18'
+	id 'org.asciidoctor.convert' version '2.4.0'
+	id 'org.openapi.generator' version '7.2.0'
+}
+
+group = 'hr.demo'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '21'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}	
+  all {
+    exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+  }
+}
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+	set('snippetsDir', file("build/generated-snippets"))
+	// set('testcontainersVersion', "1.17.6")
+}
+
+dependencies {
+	// OpenAPI
+	api "org.openapitools:jackson-databind-nullable:0.2.6"
+	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0"
+
+	// Validation
+	implementation "jakarta.validation:jakarta.validation-api:3.1.0"
+	implementation "org.hibernate:hibernate-validator:8.0.2.Final"
+
+	// Spring core
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+	implementation "org.springframework.boot:spring-boot-starter-web"
+	implementation 'org.springframework.boot:spring-boot-starter-log4j2'
+
+	// Security
+	implementation "org.springframework.boot:spring-boot-starter-security"
+
+	// JWT
+	implementation "io.jsonwebtoken:jjwt-impl:0.12.3"
+	implementation "io.jsonwebtoken:jjwt-jackson:0.12.3"
+
+	// Database
+	implementation "org.postgresql:postgresql"
+
+	// Lombok
+
+	compileOnly 'org.projectlombok:lombok:'
+	annotationProcessor 'org.projectlombok:lombok'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	// Test
+	testImplementation "org.springframework.boot:spring-boot-starter-test"
+	testImplementation "org.springframework.security:spring-security-test"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+
+	// Dev tools
+	developmentOnly "org.springframework.boot:spring-boot-devtools"
+}
+
+bootJar {
+   archiveFileName = "${archiveBaseName.get()}.${archiveExtension.get()}"
+}
+
+tasks.named('test') {
+	outputs.dir snippetsDir
+	useJUnitPlatform()
+}
+
+hibernate {
+	enhancement {
+		lazyInitialization true
+		dirtyTracking true
+		associationManagement true
+	}
+}
+
+sourceSets {
+	getByName("main") {
+		java {
+			srcDir("$buildDir/generated/openapi/src/main/java")
+		}
+	}
+}
+
+import org.openapitools.generator.gradle.plugin.tasks.GenerateTask
+
+tasks.register("apiJava", GenerateTask) {
+	apiJava.generatorName.set("spring")
+  	apiJava.id = "apiJava"
+
+	apiJava.inputSpec.set("$rootDir/docs/openapi/api.yaml")
+	apiJava.outputDir.set("$buildDir/generated/openapi")
+
+	apiJava.apiPackage.set("hr.demo.demoProject.api")
+	apiJava.invokerPackage.set("hr.demo.demoProject")
+	apiJava.modelPackage.set("hr.demo.demoProject.api.model")
+	apiJava.configOptions = [
+			"generatedConstructorWithRequiredArgs": "false",
+			useJakartaEe: "true",
+			useSpringBoot3: "true",
+			serializableModel: "true",
+			// delegatePattern: "true",
+			interfaceOnly: "true",
+			useTags: "true",
+			dateLibrary: "java8-localdatetime",
+			additionalModelTypeAnnotations: "@lombok.Builder(toBuilder = true);@lombok.NoArgsConstructor;@lombok.AllArgsConstructor"
+	] 
+}
+
+tasks.compileJava.dependsOn('apiJava')
+
+
+
+
+

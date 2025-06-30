@@ -1,0 +1,50 @@
+#global
+server.port: 8085
+# dev test prod
+environment: dev
+
+spring:
+  application:
+    name: demoProject
+#database
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        ddl-auto: update
+    show-sql: true
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://dpg-d1ejgiqdbo4c73eqm7pg-a.frankfurt-postgres.render.com/demo_99vo
+    username: demo_99vo_user
+    password: eXFkprnQNFn22yCygrVXVzhNwxhVAeq8
+  sql.init.mode: always
+
+
+server:
+  tomcat:
+    max-swallow-size: 512MB
+    max-http-form-post-size: 512MB
+  servlet:
+    session:
+      cookie:
+        secure: true
+        http-only: true
+
+web:
+  cors:
+    allow-credentials: true
+    allowed-origins: http://localhost:4200
+    # allowed-methods: GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD
+    allowed-methods: GET, POST, OPTIONS, HEAD
+    max-age: 3600
+    allowed-headers: Requestor-Type, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization
+    exposed-headers: X-Get-Header
+
+#logging
+logging:
+  level:
+    root: INFO
+  pattern:
+    level: "trace_id=%mdc{traceId} span_id=%mdc{spanId} trace_flags=%mdc{traceFlags} %p"

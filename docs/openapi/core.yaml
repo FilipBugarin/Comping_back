@@ -1,0 +1,226 @@
+paths:
+  movies:
+    get:
+      tags:
+        - Core
+      summary: Get all movies
+      responses:
+        '200':
+          description: List of movies
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieResponse'
+
+    post:
+      tags:
+        - Core
+      summary: Create new movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieRequest'
+      responses:
+        '201':
+          description: Movie created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+
+  movie_id:
+    get:
+      tags:
+        - Core
+      summary: Get movie by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Single movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+
+    put:
+      tags:
+        - Core
+      summary: Update movie
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MovieRequest'
+      responses:
+        '200':
+          description: Updated movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieResponse'
+
+    delete:
+      tags:
+        - Core
+      summary: Delete movie
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+
+  actors:
+    get:
+      tags:
+        - Core
+      summary: Get all actors
+      responses:
+        '200':
+          description: List of actors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActorResponse'
+
+    post:
+      tags:
+        - Core
+      summary: Create new actor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+      responses:
+        '201':
+          description: Actor created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorResponse'
+
+  actor_id:
+    get:
+      tags:
+        - Core
+      summary: Get actor by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Single actor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorResponse'
+
+    put:
+      tags:
+        - Core
+      summary: Update actor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActorRequest'
+      responses:
+        '200':
+          description: Updated actor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActorResponse'
+
+    delete:
+      tags:
+        - Core
+      summary: Delete actor
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Deleted successfully
+
+components:
+  schemas:
+    MovieRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        actorIds:
+          type: array
+          items:
+            type: integer
+
+    MovieResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        actors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActorResponse'
+
+    ActorRequest:
+      type: object
+      properties:
+        description:
+          type: string
+        movieIds:
+          type: array
+          items:
+            type: integer
+
+    ActorResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        description:
+          type: string
+        movies:
+          type: array
+          items:
+            $ref: '#/components/schemas/MovieResponse'

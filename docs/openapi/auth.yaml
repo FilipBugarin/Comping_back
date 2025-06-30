@@ -1,0 +1,71 @@
+paths:
+  authenticate:
+    post:
+      tags:
+        - auth
+      operationId: authenticate
+      summary: user authenticate call for test purposes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        200:
+          description: successful login
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+
+  refresh:
+    post:
+      tags:
+        - auth
+      operationId: refresh
+      summary: user authentication refresh token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+      responses:
+        200:
+          description: fresh refresh token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+
+components:
+  schemas:
+    AuthenticationRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        refreshToken:
+          type: string
+
+    AuthenticationResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        token:
+          type: string
+        refreshToken:
+          type: string
+        username:
+          type: string
+        expiresAt:
+          type: string
+          format: date-time
+        refreshTokenExpiresAt:
+          type: string
+          format: date-time
+        roles:
+          type: array
+          items:
+            type: string
