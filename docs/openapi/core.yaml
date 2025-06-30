@@ -1,19 +1,24 @@
 paths:
-  movies:
-    get:
+  movies-filter:
+    post:
       tags:
         - Core
-      summary: Get all movies
+      summary: Filter and paginate movies
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetMoviesRequest'
       responses:
         '200':
-          description: List of movies
+          description: Paginated list of movies
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/MovieResponse'
+                $ref: '#/components/schemas/MoviesFilterPost200Response'
 
+  movie-add:
     post:
       tags:
         - Core
@@ -32,7 +37,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MovieResponse'
 
-  movie_id:
+  movie:
     get:
       tags:
         - Core
@@ -89,21 +94,26 @@ paths:
         '204':
           description: Deleted successfully
 
-  actors:
-    get:
+  actors-filter:
+    post:
       tags:
         - Core
-      summary: Get all actors
+      summary: Filter and paginate actors
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetActorsRequest'
       responses:
         '200':
-          description: List of actors
+          description: Paginated list of actors
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ActorResponse'
+                $ref: '#/components/schemas/ActorsFilterPost200Response'
 
+  actor-add:
     post:
       tags:
         - Core
@@ -122,7 +132,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ActorResponse'
 
-  actor_id:
+  actor:
     get:
       tags:
         - Core
@@ -181,6 +191,53 @@ paths:
 
 components:
   schemas:
+
+    PagedMovieResponse:
+      allOf:
+        - $ref: 'common.yaml#/components/schemas/PagingInfo'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/MovieResponse'
+
+    PagedActorResponse:
+      allOf:
+        - $ref: 'common.yaml#/components/schemas/PagingInfo'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/ActorResponse'
+
+    GetMoviesRequest:
+      allOf:
+        - $ref: 'common.yaml#/components/schemas/Paging'
+        - type: object
+          properties:
+            name:
+              type: string
+            actorIds:
+              type: array
+              items:
+                type: integer
+                format: int64
+
+    GetActorsRequest:
+      allOf:
+        - $ref: 'common.yaml#/components/schemas/Paging'
+        - type: object
+          properties:
+            description:
+              type: string
+            movieIds:
+              type: array
+              items:
+                type: integer
+                format: int64
+
     MovieRequest:
       type: object
       properties:
@@ -224,3 +281,23 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/MovieResponse'
+
+    MoviesFilterPost200Response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/MovieResponse'
+        pagingInfo:
+          $ref: 'common.yaml#/components/schemas/PagingInfo'
+
+    ActorsFilterPost200Response:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActorResponse'
+        pagingInfo:
+          $ref: 'common.yaml#/components/schemas/PagingInfo'

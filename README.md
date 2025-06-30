@@ -79,6 +79,8 @@ Sadrži:
 - M:M veza `Movie <-> Actor` implementirana je kroz eksplicitni entitet `MovieActor`
 - OpenAPI YAML koristi se za automatsko generiranje REST sloja i modela (interfejs + DTO)
 
+- Pokretanje projekta - clean, apiJava, bootRun
+
 ---
 
 © 2025 – Comping Demo Project

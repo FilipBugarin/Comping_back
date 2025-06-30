@@ -1,9 +1,6 @@
 package hr.demo.demoProject.api;
 
-import hr.demo.demoProject.api.model.ActorRequest;
-import hr.demo.demoProject.api.model.ActorResponse;
-import hr.demo.demoProject.api.model.MovieRequest;
-import hr.demo.demoProject.api.model.MovieResponse;
+import hr.demo.demoProject.api.model.*;
 import hr.demo.demoProject.services.CoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,112 +17,106 @@ public class CoreApiControllerImpl implements CoreApi{
     private final CoreService coreService;
 
     /**
-     * GET /actors : Get all actors
-     *
-     * @return List of actors (status code 200)
-     */
-    @Override
-    public ResponseEntity<List<ActorResponse>> actorsGet() {
-        return ResponseEntity.ok(coreService.getAllActors());
-    }
-
-
-    /**
-     * DELETE /actors/{id} : Delete actor
-     *
-     * @param id (required)
-     * @return Deleted successfully (status code 204)
-     */
-    @Override
-    public ResponseEntity<Void> actorsIdDelete(Integer id) {
-        coreService.deleteActor(id);
-        return ResponseEntity.noContent().build();
-    }
-
-    /**
-     * GET /actors/{id} : Get actor by ID
+     * GET /actor : Get actor by ID
      *
      * @param id (required)
      * @return Single actor (status code 200)
      */
     @Override
-    public ResponseEntity<ActorResponse> actorsIdGet(Integer id) {
+    public ResponseEntity<ActorResponse> actorIdGet(Integer id) {
         return ResponseEntity.ok(coreService.getActorById(id));
     }
 
     /**
-     * PUT /actors/{id} : Update actor
+     * POST /actor : Create new actor
+     *
+     * @param actorRequest (required)
+     * @return Actor created (status code 201)
+     */
+    @Override
+    public ResponseEntity<ActorResponse> actorPost(ActorRequest actorRequest) {
+        return ResponseEntity.status(201).body(coreService.createActor(actorRequest));
+    }
+
+    /**
+     * PUT /actor : Update actor
      *
      * @param id           (required)
      * @param actorRequest (required)
      * @return Updated actor (status code 200)
      */
     @Override
-    public ResponseEntity<ActorResponse> actorsIdPut(Integer id, ActorRequest actorRequest) {
+    public ResponseEntity<ActorResponse> actorIdPut(Integer id, ActorRequest actorRequest) {
         return ResponseEntity.ok(coreService.updateActor(id, actorRequest));
     }
 
     /**
-     * POST /actors : Create new actor
+     * POST /actors/filter : Filter and paginate actors
      *
-     * @param actorRequest (required)
-     * @return Actor created (status code 201)
+     * @param getActorsRequest (required)
+     * @return Paginated list of actors (status code 200)
      */
     @Override
-    public ResponseEntity<ActorResponse> actorsPost(ActorRequest actorRequest) {
-        return ResponseEntity.status(201).body(coreService.createActor(actorRequest));
+    public ResponseEntity<ActorsFilterPost200Response> actorsFilterPost(GetActorsRequest getActorsRequest) {
+        var response = coreService.getActorsFiltered(getActorsRequest);
+        return ResponseEntity.ok(response);
     }
 
     /**
-     * GET /movies : Get all movies
-     *
-     * @return List of movies (status code 200)
-     */
-    public ResponseEntity<List<MovieResponse>> moviesGet() {
-        return ResponseEntity.ok(coreService.getAllMovies());
-    }
-
-    /**
-     * DELETE /movies/{id} : Delete movie
+     * DELETE /movie : Delete movie
      *
      * @param id (required)
      * @return Deleted successfully (status code 204)
      */
     @Override
-    public ResponseEntity<Void> moviesIdDelete(Integer id) {
+    public ResponseEntity<Void> movieIdDelete(Integer id) {
         coreService.deleteMovie(id);
         return ResponseEntity.noContent().build();
     }
 
     /**
-     * GET /movies/{id} : Get movie by ID
+     * GET /movie : Get movie by ID
      *
      * @param id (required)
      * @return Single movie (status code 200)
      */
-    public ResponseEntity<MovieResponse> moviesIdGet(Integer id) {
+    @Override
+    public ResponseEntity<MovieResponse> movieIdGet(Integer id) {
         return ResponseEntity.ok(coreService.getMovieById(id));
     }
 
     /**
-     * PUT /movies/{id} : Update movie
-     *
-     * @param id           (required)
-     * @param movieRequest (required)
-     * @return Updated movie (status code 200)
-     */
-    public ResponseEntity<MovieResponse> moviesIdPut(Integer id, MovieRequest movieRequest) {
-        return ResponseEntity.ok(coreService.updateMovie(id, movieRequest));
-    }
-
-    /**
-     * POST /movies : Create new movie
+     * POST /movie : Create new movie
      *
      * @param movieRequest (required)
      * @return Movie created (status code 201)
      */
     @Override
-    public ResponseEntity<MovieResponse> moviesPost(MovieRequest movieRequest) {
+    public ResponseEntity<MovieResponse> moviePost(MovieRequest movieRequest) {
         return ResponseEntity.status(201).body(coreService.createMovie(movieRequest));
+    }
+
+    /**
+     * PUT /movie : Update movie
+     *
+     * @param id           (required)
+     * @param movieRequest (required)
+     * @return Updated movie (status code 200)
+     */
+    @Override
+    public ResponseEntity<MovieResponse> movieIdPut(Integer id, MovieRequest movieRequest) {
+        return ResponseEntity.ok(coreService.updateMovie(id, movieRequest));
+    }
+
+    /**
+     * POST /movies/filter : Filter and paginate movies
+     *
+     * @param getMoviesRequest (required)
+     * @return Paginated list of movies (status code 200)
+     */
+    @Override
+    public ResponseEntity<MoviesFilterPost200Response> moviesFilterPost(GetMoviesRequest getMoviesRequest) {
+        var response = coreService.getMoviesFiltered(getMoviesRequest);
+        return ResponseEntity.ok(response);
     }
 }

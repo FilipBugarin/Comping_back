@@ -9,6 +9,7 @@ import hr.demo.demoProject.repository.core.ActorRepository;
 import hr.demo.demoProject.repository.core.MovieActorRepository;
 import hr.demo.demoProject.repository.core.MovieRepository;
 import hr.demo.demoProject.repository.core.UserRepository;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -26,6 +27,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class CoreServiceTest {
+
+    @Mock
+    private EntityManager entityManager;
 
     @Mock
     private MovieRepository movieRepository;
@@ -61,7 +65,7 @@ public class CoreServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        coreService = new CoreService(movieActorRepository, movieRepository, actorRepository, userRepository);
+        coreService = new CoreService(entityManager, movieActorRepository, movieRepository, actorRepository, userRepository);
 
         mockUser = new User();
         mockUser.setId(1L);

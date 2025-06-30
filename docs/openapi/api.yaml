@@ -15,14 +15,24 @@ paths:
   #################
   # Core
   #################
-  /movies:
-    $ref: './core.yaml#/paths/movies'
-  /movies/{id}:
-    $ref: './core.yaml#/paths/movie_id'
-  /actors:
-    $ref: './core.yaml#/paths/actors'
-  /actors/{id}:
-    $ref: './core.yaml#/paths/actor_id'
+
+  /movies/filter:
+    $ref: './core.yaml#/paths/movies-filter'
+
+  /movie:
+    $ref: './core.yaml#/paths/movie-add'
+
+  /movie/{id}:
+    $ref: './core.yaml#/paths/movie'
+
+  /actors/filter:
+    $ref: './core.yaml#/paths/actors-filter'
+
+  /actor:
+    $ref: './core.yaml#/paths/actor-add'
+
+  /actor/{id}:
+    $ref: './core.yaml#/paths/actor'
 
 components:
   schemas:
